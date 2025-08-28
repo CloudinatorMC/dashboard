@@ -8,17 +8,14 @@ import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Globe, CheckCircle, Clock, AlertCircle, Plus } from "lucide-react"
+import { useQuery } from "convex/react";
+import { api } from "../convex/_generated/api"
 
 export function DomainsPage() {
   const [newDomain, setNewDomain] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const domains = [
-    { name: "survival.example.com", status: "verified", claimedAt: "2024-01-15" },
-    { name: "play.minecraft-server.net", status: "pending", claimedAt: "2024-01-20" },
-    { name: "lobby.gameworld.io", status: "verified", claimedAt: "2024-01-18" },
-    { name: "pvp.battlecraft.com", status: "failed", claimedAt: "2024-01-22" },
-  ]
+  const domains = useQuery(api.domains.get) || []
 
   const handleClaimDomain = async () => {
     if (!newDomain.trim()) return
