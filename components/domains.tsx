@@ -73,7 +73,7 @@ export function DomainsPage() {
             Claim New Domain
           </CardTitle>
           <CardDescription>
-            Add a new domain to your proxy configuration. You'll need to verify ownership through DNS records.
+            Add a new domain to your proxy configuration. You&lsquo;ll need to verify ownership through DNS records.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -91,7 +91,7 @@ export function DomainsPage() {
           <Alert>
             <Globe className="h-4 w-4" />
             <AlertDescription>
-              After claiming, you'll receive DNS records to add to your domain's DNS configuration for verification.
+              After claiming, you&lsquo;ll receive DNS records to add to your domain&lsquo;s DNS configuration for verification.
             </AlertDescription>
           </Alert>
 
@@ -155,7 +155,7 @@ export function DomainsPage() {
               <div>
                 <p className="font-medium">Add DNS Record</p>
                 <p className="text-sm text-muted-foreground">
-                  Add the provided TXT record to your domain's DNS settings
+                  Add the provided TXT record to your domain&lsquo;s DNS settings
                 </p>
               </div>
             </div>
