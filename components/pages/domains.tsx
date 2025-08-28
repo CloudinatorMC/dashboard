@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Globe, CheckCircle, Clock, AlertCircle, Plus } from "lucide-react"
 import { useQuery } from "convex/react";
-import { api } from "../convex/_generated/api"
+import { api } from "@/convex/_generated/api"
 
 export function DomainsPage() {
   const [newDomain, setNewDomain] = useState("")

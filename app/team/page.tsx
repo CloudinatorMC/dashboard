@@ -1,5 +1,5 @@
 import { AppSidebar } from "@/components/app-sidebar"
-import { TeamsPage } from "@/components/teams"
+import { TeamsPage } from "@/components/pages/teams"
 import {
   Breadcrumb,
   BreadcrumbItem,

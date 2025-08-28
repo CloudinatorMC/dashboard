@@ -1,5 +1,5 @@
 import { AppSidebar } from "@/components/app-sidebar"
-import { RoutesPage } from "@/components/routes"
+import { RoutesPage } from "@/components/pages/routes"
 import {
   Breadcrumb,
   BreadcrumbItem,

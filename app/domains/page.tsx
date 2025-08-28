@@ -1,5 +1,5 @@
 import { AppSidebar } from "@/components/app-sidebar"
-import { DomainsPage } from "@/components/domains"
+import { DomainsPage } from "@/components/pages/domains"
 import {
   Breadcrumb,
   BreadcrumbItem,
