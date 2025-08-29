@@ -15,8 +15,6 @@ export function DomainsPage() {
   const [newDomain, setNewDomain] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const domains = useQuery(api.domains.get) || []
-
   const handleClaimDomain = async () => {
     if (!newDomain.trim()) return
 
@@ -25,34 +23,6 @@ export function DomainsPage() {
     await new Promise((resolve) => setTimeout(resolve, 2000))
     setIsSubmitting(false)
     setNewDomain("")
-  }
-
-  const getStatusBadge = (status: string) => {
-    switch (status) {
-      case "verified":
-        return (
-          <Badge className="bg-accent text-accent-foreground">
-            <CheckCircle className="w-3 h-3 mr-1" />
-            Verified
-          </Badge>
-        )
-      case "pending":
-        return (
-          <Badge variant="secondary">
-            <Clock className="w-3 h-3 mr-1" />
-            Pending
-          </Badge>
-        )
-      case "failed":
-        return (
-          <Badge variant="destructive">
-            <AlertCircle className="w-3 h-3 mr-1" />
-            Failed
-          </Badge>
-        )
-      default:
-        return <Badge variant="outline">Unknown</Badge>
-    }
   }
 
   return (
@@ -108,34 +78,7 @@ export function DomainsPage() {
         </CardContent>
       </Card>
 
-      {/* Existing Domains */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Your Domains</CardTitle>
-          <CardDescription>Manage your claimed domains and their verification status</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            {domains.map((domain) => (
-              <div key={domain.name} className="flex items-center justify-between p-4 border rounded-lg">
-                <div className="flex items-center gap-3">
-                  <Globe className="w-5 h-5 text-muted-foreground" />
-                  <div>
-                    <p className="font-medium">{domain.name}</p>
-                    <p className="text-sm text-muted-foreground">Claimed on {domain.claimedAt}</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3">
-                  {getStatusBadge(domain.status)}
-                  <Button variant="outline" size="sm">
-                    {domain.status === "failed" ? "Retry" : "Manage"}
-                  </Button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+      <ExistingDomains/>
 
       {/* Verification Instructions */}
       <Card>
@@ -182,5 +125,66 @@ export function DomainsPage() {
         </CardContent>
       </Card>
     </div>
+  )
+}
+
+function ExistingDomains() {
+  const getStatusBadge = (status: string) => {
+    switch (status) {
+      case "verified":
+        return (
+          <Badge className="bg-accent text-accent-foreground">
+            <CheckCircle className="w-3 h-3 mr-1" />
+            Verified
+          </Badge>
+        )
+      case "pending":
+        return (
+          <Badge variant="secondary">
+            <Clock className="w-3 h-3 mr-1" />
+            Pending
+          </Badge>
+        )
+      case "failed":
+        return (
+          <Badge variant="destructive">
+            <AlertCircle className="w-3 h-3 mr-1" />
+            Failed
+          </Badge>
+        )
+      default:
+        return <Badge variant="outline">Unknown</Badge>
+    }
+  }
+
+  const domains = useQuery(api.domains.get) || []
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Your Domains</CardTitle>
+        <CardDescription>Manage your claimed domains and their verification status</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div className="space-y-4">
+          {domains.map((domain) => (
+            <div key={domain.name} className="flex items-center justify-between p-4 border rounded-lg">
+              <div className="flex items-center gap-3">
+                <Globe className="w-5 h-5 text-muted-foreground" />
+                <div>
+                  <p className="font-medium">{domain.name}</p>
+                  <p className="text-sm text-muted-foreground">Claimed on {domain.claimedAt}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3">
+                {getStatusBadge(domain.status)}
+                <Button variant="outline" size="sm">
+                  {domain.status === "failed" ? "Retry" : "Manage"}
+                </Button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </CardContent>
+    </Card>
   )
 }

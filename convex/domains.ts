@@ -3,6 +3,11 @@ import { query } from "./_generated/server";
 export const get = query({
   args: {},
   handler: async (ctx) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (identity === null) {
+      throw new Error("Unauthenticated call to mutation");
+    }
+
     return [
       { name: "survival.example.com", status: "verified", claimedAt: "2024-01-15" },
       { name: "play.minecraft-server.net", status: "pending", claimedAt: "2024-01-20" },
