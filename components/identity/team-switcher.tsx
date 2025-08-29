@@ -1,39 +1,32 @@
 "use client"
 
 import * as React from "react"
-import { ChevronsUpDown, Plus } from "lucide-react"
 
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  useSidebar,
 } from "@/components/ui/sidebar"
+import { useWorkOSToken, useWorkOSUser, useWorkOSOrganizations } from "./workos-context";
+import { switchToOrganization } from "@/app/api/switch-to-organization";
+import { ChevronsUpDown, Plus, Globe2 } from "lucide-react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { useIsMobile } from "@/hooks/use-mobile";
 
-export function TeamSwitcher({
-  teams,
-}: {
-  teams: {
-    name: string
-    logo: React.ElementType
-    plan: string
-  }[]
-}) {
-  const { isMobile } = useSidebar()
-  const [activeTeam, setActiveTeam] = React.useState(teams[0])
 
-  if (!activeTeam) {
+export function TeamSwitcher() {
+  const isMobile = useIsMobile();
+
+  const token = useWorkOSToken();
+  const user = useWorkOSUser();
+  const organizations = useWorkOSOrganizations();
+
+  if (!token || !user || !organizations) {
     return null
   }
+
+  const currentOrgId = user.organizationId;
+  const activeTeam = organizations.find(org => org.organizationId === currentOrgId) || organizations[0];
 
   return (
     <SidebarMenu>
@@ -45,11 +38,11 @@ export function TeamSwitcher({
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
               <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
-                <activeTeam.logo className="size-4" />
+                <Globe2 className="size-4" />
               </div>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium">{activeTeam.name}</span>
-                <span className="truncate text-xs">{activeTeam.plan}</span>
+                <span className="truncate font-medium">{activeTeam.organizationName}</span>
+                <span className="truncate text-xs">{"Free"}</span>
               </div>
               <ChevronsUpDown className="ml-auto" />
             </SidebarMenuButton>
@@ -63,16 +56,21 @@ export function TeamSwitcher({
             <DropdownMenuLabel className="text-muted-foreground text-xs">
               Teams
             </DropdownMenuLabel>
-            {teams.map((team, index) => (
+            {organizations.map((team, index) => (
               <DropdownMenuItem
-                key={team.name}
-                onClick={() => setActiveTeam(team)}
+                key={team.organizationName}
+                onClick={async () => {
+                  await switchToOrganization({
+                    organizationId: team.organizationId,
+                    pathname: window.location.pathname,
+                  })
+                }}
                 className="gap-2 p-2"
               >
                 <div className="flex size-6 items-center justify-center rounded-md border">
-                  <team.logo className="size-3.5 shrink-0" />
+                  <Globe2 className="size-3.5 shrink-0" />
                 </div>
-                {team.name}
+                {team.organizationName}
                 <DropdownMenuShortcut>⌘{index + 1}</DropdownMenuShortcut>
               </DropdownMenuItem>
             ))}

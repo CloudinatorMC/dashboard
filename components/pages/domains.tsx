@@ -8,13 +8,12 @@ import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Globe, CheckCircle, Clock, AlertCircle, Plus } from "lucide-react"
-import { useQuery, useConvexAuth } from "convex/react";
+import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api"
 
 export function DomainsPage() {
   const [newDomain, setNewDomain] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const {isLoading, isAuthenticated} = useConvexAuth();
 
   const handleClaimDomain = async () => {
     if (!newDomain.trim()) return
@@ -24,10 +23,6 @@ export function DomainsPage() {
     await new Promise((resolve) => setTimeout(resolve, 2000))
     setIsSubmitting(false)
     setNewDomain("")
-  }
-
-  if (isLoading || !isAuthenticated) {
-    return null; // if we display a loading state, the user would believe the page is slow.
   }
 
   return (

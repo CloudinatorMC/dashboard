@@ -10,34 +10,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Route, Server, Plus, Edit, Trash2 } from "lucide-react"
+import { useQuery } from "convex/react";
+import { api } from "@/convex/_generated/api"
 
 export function RoutesPage() {
-  const [routes, setRoutes] = useState([
-    {
-      id: 1,
-      subdomain: "lobby",
-      domain: "example.com",
-      target: "192.168.1.100:25565",
-      useHaproxy: true,
-      status: "active",
-    },
-    {
-      id: 2,
-      subdomain: "survival",
-      domain: "example.com",
-      target: "192.168.1.101:25565",
-      useHaproxy: false,
-      status: "active",
-    },
-    {
-      id: 3,
-      subdomain: "creative",
-      domain: "minecraft-server.net",
-      target: "192.168.1.102:25565",
-      useHaproxy: true,
-      status: "inactive",
-    },
-  ])
+  const routes = useQuery(api.routes.get) || [];
 
   const [showAddForm, setShowAddForm] = useState(false)
   const [editingRoute, setEditingRoute] = useState<number | null>(null)
@@ -59,7 +36,6 @@ export function RoutesPage() {
       status: "active",
     }
 
-    setRoutes([...routes, route])
     setNewRoute({ subdomain: "", domain: "", target: "", useHaproxy: false })
     setShowAddForm(false)
   }
@@ -81,7 +57,6 @@ export function RoutesPage() {
   const handleUpdateRoute = () => {
     if (!newRoute.subdomain || !newRoute.domain || !newRoute.target || !editingRoute) return
 
-    setRoutes(routes.map((route) => (route.id === editingRoute ? { ...route, ...newRoute } : route)))
     setNewRoute({ subdomain: "", domain: "", target: "", useHaproxy: false })
     setEditingRoute(null)
     setShowAddForm(false)
@@ -94,15 +69,10 @@ export function RoutesPage() {
   }
 
   const toggleRouteStatus = (id: number) => {
-    setRoutes(
-      routes.map((route) =>
-        route.id === id ? { ...route, status: route.status === "active" ? "inactive" : "active" } : route,
-      ),
-    )
+
   }
 
   const deleteRoute = (id: number) => {
-    setRoutes(routes.filter((route) => route.id !== id))
   }
 
   return (
@@ -184,7 +154,7 @@ export function RoutesPage() {
                 <Server className="h-4 w-4" />
                 <AlertDescription>
                   HAProxy will preserve the original client IP addresses when forwarding connections to your Minecraft
-                  server.
+                  server however, this requires a mod or plugin on your server to read the forwarded IPs.
                 </AlertDescription>
               </Alert>
             )}
