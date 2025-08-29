@@ -5,6 +5,13 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { workos } from "@/components/identity/workos-provider";
 
+interface SessionError {
+  rawData: {
+    authkit_redirect_url?: string;
+  };
+  error: string;
+}
+
 //custom backend switch has to accept some organizationId
 export const switchToOrganization = async ({
   organizationId,
@@ -15,7 +22,8 @@ export const switchToOrganization = async ({
 }) => {
   try {
     await refreshSession({ organizationId, ensureSignedIn: true });
-  } catch (err: any) {
+  } catch (errr) {
+    const err = errr as SessionError;
     if (err.rawData.authkit_redirect_url) {
       redirect(err.rawData.authkit_redirect_url);
     } else {

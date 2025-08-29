@@ -36,6 +36,8 @@ export function RoutesPage() {
       status: "active",
     }
 
+    console.log("Adding route:", route)
+
     setNewRoute({ subdomain: "", domain: "", target: "", useHaproxy: false })
     setShowAddForm(false)
   }
@@ -69,10 +71,11 @@ export function RoutesPage() {
   }
 
   const toggleRouteStatus = (id: number) => {
-
+    console.log("Toggling status for route ID:", id)
   }
 
   const deleteRoute = (id: number) => {
+    console.log("Deleting route ID:", id)
   }
 
   return (
